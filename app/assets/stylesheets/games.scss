@@ -1,0 +1,63 @@
+// Place all the styles related to the Games controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+.target-box {
+  display: none;
+  border: 2px solid red;
+  height: 100px;
+  width: 100px;
+  position: absolute;
+  pointer-events: none;
+}
+
+.target-box.show {
+  display: inline;
+}
+
+.tag-container {
+  position: absolute;
+  /*pointer-events: none;*/
+}
+
+.placed-box {
+  /*display: none;*/
+  border: 2px solid orange;
+  height: 100px;
+  width: 100px;
+  position: absolute;
+  pointer-events: none;
+}
+
+.option-display {
+}
+
+.tag-to-bottom {
+  margin-top: 104px;
+  background-color: orange;
+  width: 104px;
+}
+
+button {
+  margin-top: 104px;
+}
+
+/*dropDown*/
+ul{
+  background-color: red;
+  list-style-type: none;
+  text-align: left;
+}
+
+li.active, li:hover {
+  background-color: #ddd;
+}
+
+.options {
+    padding: 90 180px;
+    display: block;
+    background-color: white;
+}
+
+div.options.show {
+    display: none;
+}
