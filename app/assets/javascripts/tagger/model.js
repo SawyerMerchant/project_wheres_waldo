@@ -37,7 +37,8 @@ TAGGER.model = (function(){
       // var test = this.parent();
       $display.text($selection);
       handleDrop.toggle($(".dropDown"));
-      $display.addClass("tag-to-bottom");
+      $display.addClass("tag-to-bottom")
+              .append("<span class='close'>" + "x" + "</span>");
     }
   };
 
@@ -46,7 +47,7 @@ TAGGER.model = (function(){
     return return_id;
   };
 
-  var setTag = function(e) {
+  var _setTag = function(e) {
     currentTag = randomID();
     var $tagContainer = $('<div>').addClass("tag-container")
                                   .appendTo(".tagable-photo")
@@ -73,14 +74,23 @@ TAGGER.model = (function(){
   var _setCreateTagListener = function() {
     $(".tagable-photo img").on("click", (function(e) {
       $(".target-box").removeClass('show');
-      setTag(e);
+      _setTag(e);
       var $selection = $("li");
       $selection.on("click", handleDrop.makePick);
     }));
   };
 
+  var _removeTag = function(e) {
+    this.parentNode.parentNode.remove();
+  };
+
+  var _setDeleteTagListener = function() {
+    $board.on("click", ".tag-to-bottom .close", _removeTag);
+  };
+
   var _setListeners = function() {
     _setCreateTagListener();
+    _setDeleteTagListener();
     //TODO other listeners
   };
 
