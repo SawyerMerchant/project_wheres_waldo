@@ -4,12 +4,12 @@ TAGGER.model = (function(){
 
   var $board;
   var crew = ["Waldo", "Wenda", "Odlaw", "Wizard Whitebeard", "Woof"];
-  var currentTag;
+  var currentTag = {};
   var $targetBox = $(".target-box");
   var $mouseX, $mouseY, $xp, $yp;
   // reproducing tags requires id, location, and character name
   // tags stored in tagLocations array should be hashes
-  var tagLocations = [];
+  var existingTags = [];
 
   // mouse enter creates red box
   // $(".tagable-photo img").on("mouseenter", (function(e) {
@@ -35,17 +35,21 @@ TAGGER.model = (function(){
 
     makePick: function(e) {
       var $selection = $(this).text();
-      var $display = $("#" + currentTag);
+      var $display = $("#" + currentTag.id);
       // var test = this.parent();
       $display.text($selection);
-      console.log(currentTag);
       handleDrop.toggle($(".dropDown"));
       $display.addClass("tag-to-bottom")
               .append("<span class='close'>" + "x" + "</span>");
-      // console.log(this.parentNode);
-      // console.log(this.parentNode.parentNode);
-      // console.log(e);
+      console.log(currentTag);
+      console.log($selection);
+      saveTag();
     }
+  };
+
+  var saveTag = function() {
+    existingTags.push(currentTag);
+    currentTag = {};
   };
 
   var randomID = function() {
@@ -53,18 +57,27 @@ TAGGER.model = (function(){
     return return_id;
   };
 
+  var saveCoords = function(e) {
+    currentTag.pageX = e.pageX;
+    currentTag.pageY = e.pageY;
+  };
+
   var _setTag = function(e) {
-    currentTag = randomID();
-    // currentTag = e.pageX + '.' + e.pageY;
+    if (currentTag.id) {
+      currentTag.$tagContainer.remove();
+    }
+    currentTag.id = randomID();
+    saveCoords(e);
     var $tagContainer = $('<div>').addClass("tag-container")
                                   .appendTo(".tagable-photo")
                                   .offset({ top: e.pageY - 50,
                                            left: e.pageX - 50 });
+    currentTag.$tagContainer = $tagContainer;
     var $placedBox = $('<div>').addClass("placed-box")
                                .appendTo($tagContainer);
     var $tag = $('<div>').insertAfter($placedBox)
                          .addClass("option-display")
-                         .attr("id", currentTag);
+                         .attr("id", currentTag.id);
     var $button = $('<button>').addClass("dropDown")
                                .attr('id', 'display')
                                .appendTo($tag);
@@ -80,7 +93,7 @@ TAGGER.model = (function(){
 
   var _setCreateTagListener = function() {
     $(".tagable-photo img").on("click", (function(e) {
-      $(".target-box").removeClass('show');
+      // $(".target-box").removeClass('show');
       _setTag(e);
       var $selection = $("li");
       $selection.on("click", handleDrop.makePick);
@@ -89,8 +102,8 @@ TAGGER.model = (function(){
 
   var _removeTag = function(e) {
     this.parentNode.parentNode.remove();
-    console.log(this.parentNode.parentNode);
-    console.log(e);
+    // console.log(this.parentNode.parentNode);
+    // console.log(e);
   };
 
   var _setDeleteTagListener = function() {
