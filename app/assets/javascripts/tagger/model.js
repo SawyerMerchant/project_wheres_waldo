@@ -6,39 +6,45 @@ TAGGER.model = (function(){
   var crew = ["Waldo", "Wenda", "Odlaw", "Wizard Whitebeard", "Woof"];
   var currentTag;
   var $targetBox = $(".target-box");
-
   var $mouseX, $mouseY, $xp, $yp;
+  // reproducing tags requires id, location, and character name
+  // tags stored in tagLocations array should be hashes
+  var tagLocations = [];
 
   // mouse enter creates red box
-  $(".tagable-photo img").on("mouseenter", (function(e) {
-    $(".target-box").addClass('show');
-  }));
+  // $(".tagable-photo img").on("mouseenter", (function(e) {
+  //   $(".target-box").addClass('show');
+  // }));
 
   // on mouse move reposition
-  $(".tagable-photo img").on("mousemove", (function(e) {
-    $(".target-box").offset({ top: e.pageY - 50,
-                             left: e.pageX - 50
-                           });
-  }));
+  // $(".tagable-photo img").on("mousemove", (function(e) {
+  //   $(".target-box").offset({ top: e.pageY - 50,
+  //                            left: e.pageX - 50
+  //                          });
+  // }));
 
   // on mouse exit toggle off
-  $(".tagable-photo img").on("mouseleave", (function(e) {
-    $(".target-box").removeClass('show');
-  }));
+  // $(".tagable-photo img").on("mouseleave", (function(e) {
+  //   $(".target-box").removeClass('show');
+  // }));
 
   var handleDrop = {
     toggle: function() {
       $(".options").toggleClass('show');
     },
 
-    makePick: function() {
+    makePick: function(e) {
       var $selection = $(this).text();
       var $display = $("#" + currentTag);
       // var test = this.parent();
       $display.text($selection);
+      console.log(currentTag);
       handleDrop.toggle($(".dropDown"));
       $display.addClass("tag-to-bottom")
               .append("<span class='close'>" + "x" + "</span>");
+      // console.log(this.parentNode);
+      // console.log(this.parentNode.parentNode);
+      // console.log(e);
     }
   };
 
@@ -49,6 +55,7 @@ TAGGER.model = (function(){
 
   var _setTag = function(e) {
     currentTag = randomID();
+    // currentTag = e.pageX + '.' + e.pageY;
     var $tagContainer = $('<div>').addClass("tag-container")
                                   .appendTo(".tagable-photo")
                                   .offset({ top: e.pageY - 50,
@@ -82,6 +89,8 @@ TAGGER.model = (function(){
 
   var _removeTag = function(e) {
     this.parentNode.parentNode.remove();
+    console.log(this.parentNode.parentNode);
+    console.log(e);
   };
 
   var _setDeleteTagListener = function() {
