@@ -9,7 +9,7 @@ TAGGER.model = (function(){
   var $mouseX, $mouseY, $xp, $yp;
   // reproducing tags requires id, location, and character name
   // tags stored in tagLocations array should be hashes
-  var existingTags = [];
+  var existingTags = {};
 
   // mouse enter creates red box
   // $(".tagable-photo img").on("mouseenter", (function(e) {
@@ -35,39 +35,55 @@ TAGGER.model = (function(){
 
     makePick: function(e) {
       var $selection = $(this).text();
-      var $display = $("#" + currentTag.id);
+      var $display = $("#" + currentTag.f_id);
       // var test = this.parent();
       $display.text($selection);
       handleDrop.toggle($(".dropDown"));
       $display.addClass("tag-to-bottom")
               .append("<span class='close'>" + "x" + "</span>");
-      console.log(currentTag);
-      console.log($selection);
+      // console.log(currentTag);
+      // console.log($selection);
+      currentTag.name = $selection;
       saveTag();
     }
   };
 
   var saveTag = function() {
-    existingTags.push(currentTag);
+    existingTags[currentTag.f_id] = currentTag.$tagContainer;
+    console.log(existingTags);
+    databasePersist(currentTag.f_id);
     currentTag = {};
   };
 
+  var databasePersist = function(id) {
+    // console.log(currentTag.f_id);
+    $.ajax( {
+      url: "/tags",
+      type: "POST",
+      contentType: 'application/json',
+      dataType: "json",
+      data: JSON.stringify({tag :
+                {front_id: currentTag.f_id,
+                 name: currentTag.name,
+                 tagX: currentTag.$tagContainer.offset().top,
+                 tagY: currentTag.$tagContainer.offset().left}
+               }),
+      success: function() {
+        alert("Got it");
+      }
+    });
+  };
+
   var randomID = function() {
-    var return_id = Math.random().toString().slice(2);
+    var return_id = Math.random().toString().slice(2, 11);
     return return_id;
   };
 
-  var saveCoords = function(e) {
-    currentTag.pageX = e.pageX;
-    currentTag.pageY = e.pageY;
-  };
-
   var _setTag = function(e) {
-    if (currentTag.id) {
+    if (currentTag.f_id) {
       currentTag.$tagContainer.remove();
     }
-    currentTag.id = randomID();
-    saveCoords(e);
+    currentTag.f_id = randomID();
     var $tagContainer = $('<div>').addClass("tag-container")
                                   .appendTo(".tagable-photo")
                                   .offset({ top: e.pageY - 50,
@@ -77,7 +93,7 @@ TAGGER.model = (function(){
                                .appendTo($tagContainer);
     var $tag = $('<div>').insertAfter($placedBox)
                          .addClass("option-display")
-                         .attr("id", currentTag.id);
+                         .attr("id", currentTag.f_id);
     var $button = $('<button>').addClass("dropDown")
                                .attr('id', 'display')
                                .appendTo($tag);
@@ -102,8 +118,26 @@ TAGGER.model = (function(){
 
   var _removeTag = function(e) {
     this.parentNode.parentNode.remove();
-    // console.log(this.parentNode.parentNode);
-    // console.log(e);
+    console.log("merf");
+    console.log(this.parentNode.id);
+    console.log(e);
+
+    $.ajax( {
+      url: "/tags/" + this.parentNode.id,
+      type: "POST",
+      contentType: 'application/json',
+      dataType: "json",
+      method: "delete",
+      // data: JSON.stringify({tag :
+      //           {front_id: currentTag.f_id,
+      //            name: currentTag.name,
+      //            tagX: currentTag.$tagContainer.offset().top,
+      //            tagY: currentTag.$tagContainer.offset().left}
+      //          }),
+      success: function() {
+        alert("Gone");
+      }
+    });
   };
 
   var _setDeleteTagListener = function() {
