@@ -2,10 +2,8 @@ class TagsController < ApplicationController
   # respond_to :json
 
   def create
-    hash = tag_params
-    # hash = JSON.parse(hash) if hash.is_a?(String)
-    p hash
-    @tag = Tag.new(hash)
+    current_user = User.find_by(id: session[:user])
+    @tag = current_user.tags.build(tag_params)
     # puts tag_params
     puts "#{@tag} is the tag///////////////////////////////"
 
@@ -15,6 +13,9 @@ class TagsController < ApplicationController
           render json: @tag, status: :created, location: @tag
         end
       end
+    else
+      p "Errors @@@@@@@@@@@@@"
+      p current_user
     end
   end
 
@@ -32,6 +33,6 @@ class TagsController < ApplicationController
   private
 
   def tag_params
-    params.require(:tag).permit(:front_id, :name, :tag_object, :tagX, :tagY)
+    params.require(:tag).permit(:front_id, :name, :tag_object, :tagX, :tagY, :user_id)
   end
 end

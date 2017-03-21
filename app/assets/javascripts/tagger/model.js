@@ -69,7 +69,7 @@ TAGGER.model = (function(){
                  tagY: currentTag.$tagContainer.offset().left}
                }),
       success: function() {
-        alert("Got it");
+        // alert("Got it");
       }
     });
   };
@@ -128,14 +128,8 @@ TAGGER.model = (function(){
       contentType: 'application/json',
       dataType: "json",
       method: "delete",
-      // data: JSON.stringify({tag :
-      //           {front_id: currentTag.f_id,
-      //            name: currentTag.name,
-      //            tagX: currentTag.$tagContainer.offset().top,
-      //            tagY: currentTag.$tagContainer.offset().left}
-      //          }),
       success: function() {
-        alert("Gone");
+        // alert("Gone");
       }
     });
   };

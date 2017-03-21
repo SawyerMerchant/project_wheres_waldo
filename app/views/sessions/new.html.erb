@@ -1,0 +1,7 @@
+<h1>Welcome to The Waldo Finder</h1>
+
+<%= form_tag session_path, method: :post do %>
+<%= label_tag "user[initials]", "Enter your initials" %>
+<%= text_field_tag "user[initials]", nil, maxlength: 3 %>
+<%= submit_tag %>
+<% end %>
