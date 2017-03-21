@@ -41,16 +41,18 @@ TAGGER.model = (function(){
       handleDrop.toggle($(".dropDown"));
       $display.addClass("tag-to-bottom")
               .append("<span class='close'>" + "x" + "</span>");
-      // console.log(currentTag);
-      // console.log($selection);
+
       currentTag.name = $selection;
+      // console.log($selection);
       saveTag();
+      var index = crew.indexOf($selection);
+      if (index > -1) {crew.splice(index, 1);}
     }
   };
 
   var saveTag = function() {
     existingTags[currentTag.f_id] = currentTag.$tagContainer;
-    console.log(existingTags);
+    // console.log(existingTags);
     databasePersist(currentTag.f_id);
     currentTag = {};
   };
@@ -118,10 +120,8 @@ TAGGER.model = (function(){
 
   var _removeTag = function(e) {
     this.parentNode.parentNode.remove();
-    console.log("merf");
-    console.log(this.parentNode.id);
-    console.log(e);
-
+    // console.log($(this.parentNode).text().slice(0, -1));
+    crew.push($(this.parentNode).text().slice(0, -1));
     $.ajax( {
       url: "/tags/" + this.parentNode.id,
       type: "POST",
@@ -138,9 +138,14 @@ TAGGER.model = (function(){
     $board.on("click", ".tag-to-bottom .close", _removeTag);
   };
 
+  var _setGameOverListener = function() {
+
+  };
+
   var _setListeners = function() {
     _setCreateTagListener();
     _setDeleteTagListener();
+    _setGameOverListener();
     //TODO other listeners
   };
 
