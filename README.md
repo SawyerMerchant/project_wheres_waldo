@@ -1,4 +1,6 @@
-project_wheres_waldo
+#Where's Waldo Project
 ====================
 
-He totally didn't pay his bill.
+An exercise marrying JavaScript and Rails.
+
+[Play it here](https://sawyerwaldo.herokuapp.com/)
