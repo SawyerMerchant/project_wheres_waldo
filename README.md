@@ -1,4 +1,4 @@
-#Where's Waldo Project
+# Where's Waldo Project
 ====================
 
 An exercise marrying JavaScript and Rails.
