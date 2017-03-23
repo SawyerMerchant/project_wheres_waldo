@@ -10,6 +10,8 @@ TAGGER.model = (function(){
   // reproducing tags requires id, location, and character name
   // tags stored in tagLocations array should be hashes
   var existingTags = {};
+  var gameOver = false;
+  var highFive = {JRS: "00:05", AGR: "00:04", URS: "00:03", SRS: "00:02", BRS: "00:01"};
 
   // mouse enter creates red box
   // $(".tagable-photo img").on("mouseenter", (function(e) {
@@ -138,14 +140,32 @@ TAGGER.model = (function(){
     $board.on("click", ".tag-to-bottom .close", _removeTag);
   };
 
-  var _setGameOverListener = function() {
-
+  var _setWinListener = function() {
+    $board.on("click", (function() {
+      if (crew.length === 0) {
+        // alert("All tags set!");
+        var $time = parseInt($("#time").text().replace(':', ''));
+        $userID = $(".tagable-photo").attr("data-id");
+        console.log($time);
+        $.ajax( {
+          url: "/users/" + $userID,
+          type: "GET",
+          contentType: 'application/json',
+          dataType: "json",
+          data: JSON.stringify({score: $time}),
+          method: "patch",
+          success: function() {
+            alert("winner");
+          }
+        });
+      }
+    }));
   };
 
   var _setListeners = function() {
     _setCreateTagListener();
     _setDeleteTagListener();
-    _setGameOverListener();
+    _setWinListener();
     //TODO other listeners
   };
 

@@ -1,6 +1,6 @@
 function startTimer(duration, display) {
   var timer = duration, minutes, seconds;
-  setInterval(function () {
+  var clock = setInterval(function () {
     minutes = parseInt(timer / 60, 10);
     seconds = parseInt(timer % 60, 10);
 
@@ -10,9 +10,14 @@ function startTimer(duration, display) {
     display.text(minutes + ":" + seconds);
 
     if (--timer < 0) {
-      timer = duration;
+      clearInterval(clock);
+      alert("Times Up :(");
     }
   }, 1000);
+
+  return {
+    timer: timer
+  };
 }
 
 jQuery(function ($) {

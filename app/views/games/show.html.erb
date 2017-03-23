@@ -1,5 +1,9 @@
-<div class="tagable-photo">
+<div class="tagable-photo" data-id='<%= @current_user.id %>'>
   <div id="time"></div>
+  <div id="high-five">
+    <h3>High Scores</h3>
+    <%= render partial: 'users', locals: {users: @users} %>
+  </div>
   <img src="https://s3.amazonaws.com/viking_education/web_development/web_app_eng/ww_giant_image.jpg" alt="Where's Waldo">
 
 </div>

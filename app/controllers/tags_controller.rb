@@ -4,8 +4,6 @@ class TagsController < ApplicationController
   def create
     current_user = User.find_by(id: session[:user])
     @tag = current_user.tags.build(tag_params)
-    # puts tag_params
-    puts "#{@tag} is the tag///////////////////////////////"
 
     if @tag.save
       respond_to do |format|
@@ -13,9 +11,6 @@ class TagsController < ApplicationController
           render json: @tag, status: :created, location: @tag
         end
       end
-    else
-      p "Errors @@@@@@@@@@@@@"
-      p current_user
     end
   end
 
